@@ -640,7 +640,7 @@ def spectral_atlas_label(input_polydata, atlas, number_of_jobs=2):
 
 def _rectangular_distance_matrix(input_polydata_n, input_polydata_m, threshold,
                               number_of_jobs=3, landmarks_n=None, landmarks_m=None,
-                              distance_method='Hausdorff', bilateral=False):
+                              distance_method='Hausdorff', bilateral=False, reverse=True):
 
     """ Internal convenience function available to clustering
     routines.
@@ -677,7 +677,8 @@ def _rectangular_distance_matrix(input_polydata_n, input_polydata_m, threshold,
                 fiber_array_m,
                 threshold, distance_method=distance_method,
                 fiber_landmarks=landmarks_n[lidx,:], 
-                landmarks=landmarks_m, bilateral=bilateral)
+                landmarks=landmarks_m, bilateral=bilateral,
+                reverse=reverse)
             for lidx in all_fibers_n)
 
         distances = numpy.array(distances).T

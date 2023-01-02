@@ -13,7 +13,7 @@ def distance_to_similarity(distance, sigmasq=100):
 
     return similarities
 
-def fiber_distance(fiber, fiber_array, threshold=0, distance_method='MeanSquared', fiber_landmarks=None, landmarks=None, sigmasq=6400, bilateral=False):
+def fiber_distance(fiber, fiber_array, threshold=0, distance_method='MeanSquared', fiber_landmarks=None, landmarks=None, sigmasq=6400, bilateral=False, reverse=True):
     """
     Find pairwise fiber distance from fiber to all fibers in fiber_array.
     The Mean and MeanSquared distances are the average distance per
@@ -23,12 +23,14 @@ def fiber_distance(fiber, fiber_array, threshold=0, distance_method='MeanSquared
     input fiber should be class Fiber. fibers should be class FiberArray
     """
 
-    # get fiber in reverse point order, equivalent representation
-    fiber_equiv = fiber.get_equivalent_fiber()
-
     # compute pairwise fiber distances along fibers
     distance_1 = _fiber_distance_internal_use(fiber, fiber_array, threshold, distance_method, fiber_landmarks, landmarks, sigmasq)
-    distance_2 = _fiber_distance_internal_use(fiber_equiv, fiber_array, threshold, distance_method, fiber_landmarks, landmarks, sigmasq)
+    if reverse:
+        # get fiber in reverse point order, equivalent representation
+        fiber_equiv = fiber.get_equivalent_fiber()
+        distance_2 = _fiber_distance_internal_use(fiber_equiv, fiber_array, threshold, distance_method, fiber_landmarks, landmarks, sigmasq)
+    else:
+        distance_2 = distance_1
         
     # choose the lowest distance, corresponding to the optimal fiber
     # representation (either forward or reverse order)
@@ -42,7 +44,7 @@ def fiber_distance(fiber, fiber_array, threshold=0, distance_method='MeanSquared
     if bilateral:
         fiber_reflect = fiber.get_reflected_fiber()
         # call this function again with the reflected fiber. Do NOT reflect again (bilateral=False) to avoid infinite loop.
-        distance_reflect = fiber_distance(fiber_reflect, fiber_array, threshold, distance_method, fiber_landmarks, landmarks, sigmasq, bilateral=False)
+        distance_reflect = fiber_distance(fiber_reflect, fiber_array, threshold, distance_method, fiber_landmarks, landmarks, sigmasq, bilateral=False, reverse=reverse)
         # choose the best distance, corresponding to the optimal fiber
         # representation (either reflected or not)
         if distance_method == 'StrictSimilarity':
