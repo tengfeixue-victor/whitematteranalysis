@@ -55,7 +55,7 @@ if not os.path.isdir(args.atlasDirectory):
 
 def list_mrml_files(input_dir):
     # Find input files
-    input_mask = "{0}/T*.mrml".format(input_dir)
+    input_mask = f"{input_dir}/T*.mrml"
     input_mrml_fnames = glob.glob(input_mask)
     return (input_mrml_fnames)
 
@@ -96,11 +96,11 @@ def output_appended_tract(cluster_vtp_list, outputfile):
 
     wma.io.write_polydata(pd_appended_cluster, outputfile)
 
-hemispheric_tracts = ["T_AF", "T_CB", "T_MdLF", "T_PLIC", "T_SLF-I", "T_SLF-II", "T_SLF-III", "T_EC", "T_EmC", "T_ICP", "T_ILF", "T_IOFF", "T_UF", 
+hemispheric_tracts = ["T_AF", "T_CB", "T_CPC", "T_MdLF", "T_PLIC", "T_SLF-I", "T_SLF-II", "T_SLF-III", "T_EC", "T_EmC", "T_ICP", "T_ILF", "T_IOFF", "T_UF", 
                      "T_Intra-CBLM-I&P", "T_Intra-CBLM-PaT", "T_CR-F", "T_CR-P", "T_CST", "T_SF", "T_SO", "T_SP", "T_TF", "T_TO", "T_TP", 
                      "T_Sup-F", "T_Sup-FP", "T_Sup-O", "T_Sup-OT", "T_Sup-P", "T_Sup-PO", "T_Sup-PT", "T_Sup-T"]
 
-commissural_tracts = ["T_CC1", "T_CC2", "T_CC3", "T_CC4", "T_CC5", "T_CC6", "T_CC7", "T_MCP", "T_CPC"]
+commissural_tracts = ["T_CC1", "T_CC2", "T_CC3", "T_CC4", "T_CC5", "T_CC6", "T_CC7", "T_MCP"]
 
 
 print("<wm_append_clusters_to_anatomical_tracts> hemispheric tracts (left and right): ")
@@ -117,7 +117,7 @@ for tract in hemispheric_tracts:
 
     cluster_vtp_list_left = list()
     cluster_vtp_list_right = list()
-    f = open(mrml, 'r') 
+    f = open(mrml) 
     for line in f:
         idx = line.find('.vtp')
         if idx > 0:
@@ -154,7 +154,7 @@ for tract in commissural_tracts:
         exit()
 
     cluster_vtp_list_comm = list()
-    f = open(mrml, 'r') 
+    f = open(mrml) 
     for line in f:
         idx = line.find('.vtp')
         if idx > 0:
@@ -172,8 +172,8 @@ for tract in commissural_tracts:
 
 def list_cluster_files(input_dir):
     # Find input files
-    input_mask = "{0}/T_*.vtk".format(input_dir)
-    input_mask2 = "{0}/T_*.vtp".format(input_dir)
+    input_mask = f"{input_dir}/T_*.vtk"
+    input_mask2 = f"{input_dir}/T_*.vtp"
     input_pd_fnames = glob.glob(input_mask) + glob.glob(input_mask2)
     input_pd_fnames = sorted(input_pd_fnames)
     return(input_pd_fnames)

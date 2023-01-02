@@ -55,8 +55,8 @@ def main():
     
     def list_cluster_files(input_dir):
         # Find input files
-        input_mask = "{0}/cluster_*.vtk".format(input_dir)
-        input_mask2 = "{0}/cluster_*.vtp".format(input_dir)
+        input_mask = f"{input_dir}/cluster_*.vtk"
+        input_mask2 = f"{input_dir}/cluster_*.vtp"
         input_pd_fnames = glob.glob(input_mask) + glob.glob(input_mask2)
         input_pd_fnames = sorted(input_pd_fnames)
         return(input_pd_fnames)
@@ -128,6 +128,13 @@ def main():
             location_data = numpy.loadtxt(open(clusterLocationFile, "rb"),
                                           dtype={'names': ('Cluster Index', 'Location Label'), 'formats': ('S17', 'S1')},
                                           delimiter="\t", skiprows=1)
+
+            # change CPC to be hemispheric
+            location_data[145][1] = b'h'
+            location_data[159][1] = b'h'
+            location_data[557][1] = b'h'
+            location_data[677][1] = b'h'
+            location_data[770][1] = b'h'
     
     # default to be changed if user input is there
     hemisphere_percent_threshold = 0.6
